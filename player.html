@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Video Player</title>
+<style>
+    /* Style the video player */
+    .video-container {
+      position: relative;
+      width: 640px; /* Set your desired width */
+      margin: 0 auto;
+    }
+
+    .video {
+      width: 100%;
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+      color: white;
+      display: flex;
+      /* justify-content: space-between;*/
+    }
+
+    .controls button {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      color: white;
+      padding: 0 20px;
+    }
+</style>
+</head>
+<body>
+
+<div class="video-container">
+    <video class="video" controls>
+        <source src="moleclh2.mp4" type="video/mp4" id="video-source">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<div class="controls">
+    <button id="play-pause-btn">Play/Pause</button>
+    <button id="mute-btn">Mute</button>
+    <input type="range" id="volume-range" min="0" max="1" step="0.1" value="1">
+    <button id="fullscreen-btn">Fullscreen</button>
+    <input type="file" id="video-file" accept="video/*">
+</div>
+
+<button onclick="ask()"> Set path </button>
+
+<script>
+    function ask(){
+        var videoPath = prompt("Enter path");
+        console.log(videoPath);
+        if (videoPath){
+            video.src = videoPath;
+        }
+        // TODO Store it somewhere (not local storage)
+    }
+</script>
+
+<script>
+    // Get elements
+    const video = document.querySelector('.video');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const muteBtn = document.getElementById('mute-btn');
+    const volumeRange = document.getElementById('volume-range');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const videoFileInput = document.getElementById('video-file');
+    const videoSource = document.getElementById('video-source');
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        video.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function togglePlayPause() {
+      if (video.paused || video.ended) {
+        video.play();
+        playPauseBtn.textContent = 'Pause';
+      } else {
+        video.pause();
+        playPauseBtn.textContent = 'Play';
+      }
+    }
+
+    function toggleMute() {
+      if (video.muted) {
+        video.muted = false;
+        muteBtn.textContent = 'Mute';
+      } else {
+        video.muted = true;
+        muteBtn.textContent = 'Unmute';
+      }
+    }
+    
+    function toggleControls(){
+        if (video.controls){
+            video.controls = false;
+        }
+        else{
+            video.controls = true;
+        }
+        return
+    }
+
+    function increasePlaybackSpeed(){
+        video.playbackRate += 0.1;
+        console.log(video.playbackRate);
+    }
+
+    function decreasePlaybackSpeed(){
+        video.playbackRate -= 0.1;
+        console.log(video.playbackRate);
+    }
+
+    // Toggle play/pause
+    playPauseBtn.addEventListener('click', togglePlayPause);
+
+    video.addEventListener('click', togglePlayPause);
+
+
+    // Toggle mute/unmute
+    muteBtn.addEventListener('click', toggleMute);
+
+
+    // Adjust volume
+    volumeRange.addEventListener('input', function() {
+      video.volume = this.value;
+    });
+
+    // Toggle fullscreen
+    fullscreenBtn.addEventListener('click', toggleFullScreen);
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+      console.log(event.key)
+      switch(event.key) {
+        case ' ':
+          togglePlayPause();
+          break;
+        case 'k':
+          togglePlayPause();
+          break;
+        case 'f':
+          toggleFullScreen();
+          break;
+        case 'h':
+          video.currentTime -= 60;
+          break;
+        case ';':
+          video.currentTime += 60;
+          break;
+        case 'j':
+          video.currentTime -= 10;
+          break;
+        case 'l':
+          video.currentTime += 10;
+          break;
+        case ',':
+          video.currentTime -= 0.1;
+          break;
+        case '.':
+          video.currentTime += 0.1;
+          break;
+        case 'c':
+          toggleControls();
+          break;
+        case '<':
+          decreasePlaybackSpeed();
+          break;
+        case '>':
+          increasePlaybackSpeed();
+          break;
+        default:
+          break;
+        // TODO For playback speed
+
+      }
+    });
+
+    // Load selected video file
+    videoFileInput.addEventListener('change', function() {
+      const file = this.files[0];
+      console.log(file);
+      // if (file) {
+        // const reader = new FileReader();
+
+        // reader.onload = function(event) {
+          // videoSource.src = event.target.result;
+          // video.load();
+          // video.play();
+        // };
+        // reader.readAsDataURL(file);
+      }
+    );
+</script>
+
+</body>
+</html>
