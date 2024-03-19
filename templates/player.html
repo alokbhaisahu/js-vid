@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Custom Video Player</title>
+<style>
+    /* Style the video player */
+    .video-container {
+      position: relative;
+      width: 640px; /* Set your desired width */
+      margin: 0 auto;
+    }
+
+    .video {
+      width: 100%;
+    }
+
+</style>
+</head>
+<body>
+
+<div class="video-container">
+    <video class="video" src={{ url_for('static', filename=video_path )}} controls>
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<script>
+    console.log("{{video_path}}")
+    // Get elements
+    const video = document.querySelector('.video');
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        video.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function togglePlayPause() {
+      if (video.paused || video.ended) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    }
+
+    function toggleMute() {
+      if (video.muted) {
+        video.muted = false;
+      } else {
+        video.muted = true;
+      }
+    }
+    
+    // function toggleControls(){
+        // if (video.controls){
+            // video.controls = false;
+        // }
+        // else{
+            // video.controls = true;
+        // }
+        // return
+    // }
+
+    function increasePlaybackSpeed(){
+        video.playbackRate += 0.1;
+        // console.log(video.playbackRate);
+    }
+
+    function decreasePlaybackSpeed(){
+        video.playbackRate -= 0.1;
+        // console.log(video.playbackRate);
+    }
+
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(event) {
+      // console.log(event.key)
+      switch(event.key) {
+        case ' ':
+          togglePlayPause();
+          break;
+        case 'k':
+          togglePlayPause();
+          break;
+        case 'f':
+          toggleFullScreen();
+          break;
+        case 'h':
+          video.currentTime -= 60;
+          break;
+        case ';':
+          video.currentTime += 60;
+          break;
+        case 'j':
+          video.currentTime -= 10;
+          break;
+        case 'l':
+          video.currentTime += 10;
+          break;
+        case ',':
+          video.currentTime -= 0.1;
+          break;
+        case '.':
+          video.currentTime += 0.1;
+          break;
+        // case 'c':
+          // toggleControls();
+          break;
+        case '<':
+          decreasePlaybackSpeed();
+          break;
+        case '>':
+          increasePlaybackSpeed();
+          break;
+        default:
+          break;
+      }
+    });
+</script>
+
+</body>
+</html>
