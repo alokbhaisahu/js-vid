@@ -21,7 +21,7 @@
 <body>
 
 <div class="video-container">
-    <video class="video" src={{ url_for('static', filename=video_path )}} controls>
+    <video class="video" src={{ url_for('serve_video', filename=video_path )}} controls>
         Your browser does not support the video tag.
     </video>
 </div>
